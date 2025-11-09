@@ -1,0 +1,131 @@
+Pantheon Pandemonium Design
+Turn Based Strategy Game
+
+Below is a detailed, high-level diagram showing how the major variables and systems interact in the first Pantheon Pandemonium game. Each “block” represents a set of variables, and the arrows describe the general flow of influence or data among them. Beneath the diagram, you’ll find explanations of each block and notes on how they connect. Feel free to modify any part of this structure if you see an opportunity for improvement.
+                          ┌───────────────────────────────────────────┐
+                          │               GAME STATE                 │
+                          │-------------------------------------------│
+                          │ • Turn Counter                           │
+                          │ • Shadow Influence                       │
+                          │ • Neutral Faction Alignment              │
+                          │ • Victory Thresholds                     │
+                          │ • Global Events                          │
+                          └───────────────────────────┬───────────────┘
+                                                      │
+                                            (Affects / Updates Tiles)
+                                                      │
+                                                      ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                         TILE VARIABLES                              │
+│---------------------------------------------------------------------│
+│ • Owner (Player / Shadow / Neutral)                                 │
+│ • Tile Type (Plains, Mountain, Sacred Site, etc.)                   │
+│ • Domain Influence (Fire, Water, Earth, Air, etc.)                  │
+│ • Movement Cost (Impassable Mountains, Swamps, etc.)                │
+│ • Stability (Resistance to takeover or corruption)                  │
+│ • Resources Generated (Faith, Divinity Wells, etc.)                 │
+│ • Event Trigger (Unique tile-based events)                          │
+└───────────────────────────────────────────┬───────────────────────────┘
+                                          │
+                            (Captured or Modified by Player / Units)
+                                          │
+                                          ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                         PLAYER VARIABLES                            │
+│---------------------------------------------------------------------│
+│ • Divinity Points (Action Currency)                                 │
+│ • Domain Affinity (Fire, Water, Earth, Air, etc.)                   │
+│ • Followers (Population / Influence)                                │
+│ • Captured Tiles (Territory Control)                                │
+│ • Victory Progress (Tracks each Victory Condition)                  │
+│ • Defensive Buff (Leftover Divinity end-of-turn)                    │
+│ • Action History (Used for triggers, logs, AI decisions)            │
+└───────────────────────────────────────────┬───────────────────────────┘
+                                          │
+                                 (Generates / Consumes)
+                                          │
+                                          ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                             RESOURCES                               │
+│---------------------------------------------------------------------│
+│ • Divinity (Primary resource replenished each turn)                 │
+│ • Faith (Tied to Followers, used for certain abilities)             │
+│ • Shadow Energy (Risky resource tied to corruption / neutrality)    │
+│ • Relics (Unique one-off items or buffs)                            │
+│ • Miracles (Powerful spells or map-altering effects)                │
+└───────────────────────────────────────────┬───────────────────────────┘
+                                          │
+                                (Funds / Supports)
+                                          │
+                                          ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│                             UNIT TYPES                              │
+│---------------------------------------------------------------------│
+│ • Explorers (Low-cost, high-mobility scouts)                        │
+│ • Wardens (Defensive units for tile fortification)                  │
+│ • Cultivators (Resource-gatherers, tile-sanctifiers)                │
+│ • Heralds (Influence units that convert or sway neutrals)           │
+│ • Guardians (Heavy defenders or area-control specialists)           │
+│ • Elemental Avatars (Domain-specific powerhouses)                   │
+│ • Shadowborn (Hybrid units that leverage Shadow Energy)             │
+└───────────────────────────────────────────────────────────────────────┘
+
+Explanations & Interaction Notes
+1.	Game State
+o	Variables: Turn Counter, Shadow Influence, Neutral Faction Alignment, Victory Thresholds, Global Events.
+o	Role:
+§	Maintains overarching conditions (e.g., turn progression, global events that can alter tile ownership or resource availability).
+§	Determines how quickly the Shadow spreads or how neutral factions might shift their allegiance.
+§	Sets the thresholds or conditions needed to win the game (e.g., controlling 75% of the map, converting Shadow, or holding key sanctified sites).
+1.	Tile Variables
+o	Variables: Owner, Tile Type, Domain Influence, Movement Cost, Stability, Resources Generated, Event Trigger.
+o	Role:
+§	Each tile on the board has unique characteristics—impassable mountains, swamps that slow movement, sacred wells that grant extra Divinity, etc.
+§	Game State can trigger events (like corruption spread or global buffs/debuffs) that change tile attributes.
+§	Player Actions (capture, sanctify, manage) update the tile’s owner, stability, and domain influence.
+1.	Player Variables
+o	Variables: Divinity Points, Domain Affinity, Followers, Captured Tiles, Victory Progress, Defensive Buff, Action History.
+o	Role:
+§	Divinity Points are the main currency for taking actions each turn (exploration, capturing, summoning units, etc.).
+§	Domain Affinity grants bonuses for certain playstyles (Fire = aggression, Earth = defense, etc.).
+§	Followers (or Faith) can unlock more advanced abilities or bolster resource generation.
+§	Victory Progress tracks the player’s march toward any of the available win conditions.
+§	Defensive Buff is leftover Divinity that converts into protective strength at the end of a turn.
+1.	Resources
+o	Variables: Divinity, Faith, Shadow Energy, Relics, Miracles.
+o	Role:
+§	Divinity is replenished each turn and spent on actions.
+§	Faith grows with Followers, influencing certain abilities and domain strength.
+§	Shadow Energy is a double-edged sword—useful for corrupting or manipulating Shadow units but risky if it backfires.
+§	Relics and Miracles are special resources that can shift the balance of power, offering either one-time massive effects or sustained buffs.
+1.	Unit Types
+o	Examples: Explorers, Wardens, Cultivators, Heralds, Guardians, Elemental Avatars, Shadowborn.
+o	Role:
+§	Units are purchased or summoned using Divinity and possibly other resources (like Faith or Shadow Energy).
+§	They enable map exploration, tile control, fortification, resource gathering, and direct conflict with rivals.
+§	Specialized units (like Elemental Avatars) reinforce your chosen domain’s strengths (Fire Avatar for aggression, Water Avatar for battlefield control, etc.).
+§	Shadowborn units leverage the neutral or corrupted parts of the map, providing unique strategic options.
+How It All Ties Together
+1.	Turn Progression & Game State
+o	At the start of each turn, the Game State updates (turn counter increments, global events may occur, Shadow Influence might spread).
+o	Player Divinity replenishes according to resources, tile ownership, and domain bonuses.
+1.	Player Actions & Resource Use
+o	Players spend Divinity (and potentially Faith or Shadow Energy) on actions like exploring, capturing tiles, or summoning units.
+o	This modifies Tile Variables (e.g., changing ownership or stability) and can trigger tile-based events.
+1.	Units in Play
+o	Summoned units move on the map, explore new areas, fortify strategic positions, or engage in combat.
+o	Their actions feed back into both Tile Variables (ownership, stability) and the Player’s progress (capturing more territory, gaining more Followers).
+1.	Victory & Late-Game
+o	As players capture more territory or complete certain objectives, their Victory Progress increases.
+o	If a Victory Threshold is met (e.g., controlling 75% of the map or converting the Shadow faction), the game ends.
+1.	Replayability
+o	Randomized maps, variable domain starting points, and different global events ensure each playthrough feels unique.
+o	Players can experiment with different Domain Affinities and resource strategies to find new paths to victory.
+Potential Improvements or Considerations
+·	Balance Tweaks: Certain domains (Fire, Water, Earth, Air) will naturally excel in certain aspects (offense, stealth, defense, mobility). It might be worth adding small, unique “penalties” to offset their strengths so no single domain is overwhelmingly powerful.
+·	Shadow/Neutral Faction: If this faction is meant to be a significant force, ensure it scales with the players. Early on, it could be weak or easily swayed, but over time it might become a major threat if ignored.
+·	Event Trigger Depth: Some tiles could have more layered triggers—e.g., capturing a haunted forest might release a local “mini-boss” or cause a beneficial/negative effect for the capturing player’s domain.
+·	Miracles & Relics: Consider gating these behind significant achievements or resource investment to maintain a sense of progression. They can be game-changing, so proper pacing is crucial.
+Feel free to adapt or expand on any of these elements as you continue designing the game. The core structure above should help you visualize the main variables and how they feed into one another.
+
+

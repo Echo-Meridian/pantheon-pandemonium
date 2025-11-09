@@ -1,0 +1,477 @@
+Pantheon Pandemonium Plan 
+
+Below you’ll find:
+1.	Game pillars & core loop
+2.	Rules of play (actions, costs, victory, difficulty)
+3.	Content & numbers (tiles, units, domains, events)
+4.	Systems (Fog of War, Shadow Spread, Capture, Sanctify, AI)
+5.	UI/UX flow (screen wireframes and copy)
+6.	Data schema (JSON) + class skeletons (Unity C#)
+7.	Procedural map generation
+8.	MVP scope, backlog & test plan
+9.	Monetization & pitch essentials
+1) Vision, Pillars, Core Loop
+Vision
+ Become a proto‑god, shape the land to your Domain, outplay rivals and the ever‑creeping Shadow, and ascend through one of several win conditions.
+Design pillars
+·	Elegant depth: few verbs, many synergies (Explore, Capture, Manage, Sanctify, Use Miracle).
+·	Reactive world: tiles visually & mechanically attune to your Domain.
+·	Shadow as third force: neutral-but-growing pressure you can fight or befriend.
+·	Short, replayable runs: randomized maps, domains, relics, events.
+·	Data‑driven: almost all content in JSON so new biomes, events, and domains drop in without code changes.
+Core loop (per turn)
+1.	Start: Refill Divinity → Apply Global & Tile events → Shadow spreads → Units refresh.
+2.	Act (spend Divinity):
+o	Explore (reveal tiles / move units / trigger discoveries)
+o	Capture (seize tile ownership)
+o	Manage (fortify, purify, build shrine, repair, buff units)
+o	Sanctify (attune tile to your Domain for economy & defenses)
+o	Summon/Ability (units, miracles, domain power)
+1.	End: Unspent Divinity becomes Aegis (defensive reserve) → Decay check → Victory check.
+Turn ends either when the player can’t afford any action or manually ends the turn. Remaining Divinity → Aegis (defensive buff next turn).
+2) Rules of Play (MVP)
+2.1 Resources
+·	Divinity (primary action currency; refreshed each turn).
+·	Faith (slow‑build economy; improves Divinity income & unlocks miracles).
+·	Shadow Energy (risky; used to sway Shadow or power Shadowborn units).
+·	Relics (one‑off or passive powers; acquired via events/ruins).
+·	Miracles (limited‑use, powerful effects; bought with Faith, found via events).
+Divinity Income (start of turn)
+divinity_gain = BASE_D + Σ(tile.divinity_yield) + domain_passive_bonus + relic_passives
+BASE_D (MVP) = 6
+
+Aegis (defensive reserve)
+aegis_next_turn = floor(remaining_divinity / 2)
+Aegis reduces Capture damage against your tiles and grants +Stability when defending.
+
+2.2 Actions (Divinity costs shown are balanced for MVP scale; all values are data‑driven)
+Action	Base Cost	Effects (short)
+Move/Explore	1 × tile.move_cost per step	Reveals fog; can trigger discoveries/events.
+Capture	4 + target.Stability − adjacency_bonus − unit_support	Attempt to seize tile ownership.
+Manage: Fortify	3	+2 Stability (cap 10).
+Manage: Purify	3	Remove 1 step of Corruption; +1 Stability if successful.
+Manage: Build Shrine	5 + build_modifiers	+2 Divinity/turn from this tile; +1 Faith/turn.
+Sanctify	6 − domain_synergy	Attune tile to your Domain (adds tile.divinity_yield + resist Shadow).
+Summon Unit	Unit specific	Creates Explorer/Warden/Cultivator/etc.
+Use Miracle	Miracle specific	Big effects; often once per acquisition.
+Adjacency bonus (Capture): −1 cost if you own ≥2 neighbors of the target; −2 if ≥4.
+Tile Stability (0–10):
+·	Affects Capture difficulty.
+·	Goes up from Fortify / Sanctify / defending.
+·	Goes down from enemy Capture attempts, some events, Shadow.
+2.3 Victory & Defeat
+·	Conquest: Control ≥75% of revealed map tiles.
+·	Sanctifier: Sanctify N holy sites (MVP: N=6 on Medium map).
+·	Shadow Accord: Convert the Shadow Alignment Meter to your side (≥100 Influence).
+·	Relic Ascension (optional switch in game setup): Assemble 3 unique Relics.
+Loss (for scenario variety; optional toggles):
+·	Shadow covers ≥60% of the map.
+·	All Sanctified tiles de‑attuned simultaneously (catastrophic event chain).
+2.4 Difficulty & Replayability (setup toggles)
+·	Map size; Tile richness (Low/Normal/High); Shadow Aggression; AI Personality; Domain deck (which domains are available); Relic/Miracle frequency.
+·	Optional “Encircle” rule (Go‑style): if you form a closed loop around enemy tiles, you flip them at EoT for free (limit by loop area cap to prevent instant wipes).
+3) Content (first pass numbers)
+3.1 Tiles (square grid for MVP; hex upgrade later is easy with data)
+Tile Type	Move Cost	Impassable	Base Stability	Yield	Notes
+Plains	1		1	+0	Bread-and-butter.
+Forest	2		2	+0	Earth synergy +1 Stability.
+Swamp	3		1	+0	Water synergy: enemy Perception −1 adjacent.
+Hills	2		2	+0	Air synergy: +1 Perception radius from here.
+Desert	2		1	+0	Fire synergy: −1 Capture cost if you’re Fire.
+Mountain	∞	✓	10	+0	Impassable; cosmetic transforms (volcano/snow).
+Coast/Water	2 (Water only: 1)		1	+0	Water units cross cheaper.
+Sacred Well	2		2	+3 Div/turn	Unique; often event‑guarded.
+Village	1		1	+1 Faith/turn	Can upgrade to Shrine.
+Ancient Ruins	2		1	(event)	Often Relic/Miracle source.
+Sanctified tiles gain +1 Div/turn and +1 Stability (stack once). Visual attunement by Domain (volcano peaks, snowy ridges, fetid marsh, etc.).
+3.2 Domains (8 MVP)
+Each domain has a Passive, a Minor Power (cheap), and a Major Rite (expensive / cooldown). All values are data‑driven.
+Fire
+·	Passive: Capture cost −1 on Desert/Hill tiles; Mountains in your territory become Volcano (cosmetic) granting adj. enemy −1 Stability during your Capture attempts.
+·	Minor: Blazing Step (2D) – chosen unit gains +1 Move for this turn.
+·	Major: Inferno (8D) – burn target 3×3 area: −2 Stability to enemy tiles, Clears Swamp.
+Water
+·	Passive: Units move across Water at cost 1; tiles adjacent to your Swamps give enemies −1 Perception.
+·	Minor: Mist (2D) – place a 2‑tile radius fog until next turn.
+·	Major: Flood (7D) – convert Plains→Swamp in a line; slows enemy movement.
+Earth
+·	Passive: +1 Stability on Forest/Hill you own; Manage: Fortify costs −1.
+·	Minor: Stone Ward (2D) – +1 Stability on a tile (cap 10).
+·	Major: Bulwark (6D) – place a Fortification (structure): +2 Stability, Shadow spread −50% on adjacent.
+Air
+·	Passive: +1 Perception radius from Hills you own; Explorers +1 Move.
+·	Minor: Gale (2D) – push fog 1 tile outward around a unit (reveal ring).
+·	Major: Tempest (6D) – enemy units in 3×3 can’t move next turn; remove Mist.
+Life
+·	Passive: +1 Faith from Villages; Purify costs −1.
+·	Minor: Bloom (2D) – target tile yields +1 Faith/turn this game.
+·	Major: Sanctuary (7D) – global: your Sanctified tiles gain +1 Stability.
+Death
+·	Passive: Capturing a tile spawns Wight (1‑turn blocker) on it (defensive).
+·	Minor: Wither (2D) – tile −1 Stability.
+·	Major: Pale Harvest (7D) – convert 2 Corrupted tiles into Shadow Energy + gain 1 Relic roll (risky).
+Order
+·	Passive: Your tiles resist Shadow (−25% spread chance).
+·	Minor: Edict (2D) – set a tile’s Stability to at least 3.
+·	Major: Mandate (6D) – next Capture you attempt this turn is auto‑success if cost ≤6.
+Chaos
+·	Passive: +10% chance random positive event each turn (also +5% negative).
+·	Minor: Jolt (1D) – re‑roll a pending event at target tile.
+·	Major: Rift (7D) – teleport a unit within 5 tiles; or random Relic roll with 25% corruption.
+(D = Divinity)
+3.3 Units (MVP)
+Unit	Cost (D)	Move	Perception	Role / Abilities
+Explorer	2	3	1	Cheap recon; +1 Move (Air passive).
+Warden	3	1	0	Stationary defense aura: +1 Stability to tile occupied.
+Cultivator	3	1	0	Can Sanctify and Purify at −1D cost.
+Herald	4	2	1	Influence: add +1 Capture adjacency bonus once/turn.
+Guardian	5	2	1	Reduces Capture damage to your tiles by 1 when adjacent.
+Elemental Avatar	8	2	2	Domain‑specific Ultimate ability (free once/3 turns).
+Shadowborn (opt)	4 + 1 SE	2	1	Uses Shadow Energy; can walk through Mist as if Plains.
+(SE = Shadow Energy)
+4) Systems & Algorithms
+4.1 Fog of War & Perception
+·	Each unit has Perception radius.
+·	Tiles are Hidden → Seen (memorized) → Visible.
+·	Dynamic effects (Mist, Tempest) can toggle visibility.
+Visibility rule:
+ A tile is Visible if within any friendly unit’s Perception OR adjacent to your Sanctified tile. Otherwise, if previously seen, it’s Seen; else Hidden.
+4.2 Capture Resolution
+capture_cost = BASE_CAPTURE(4)
+             + target.stability
+             - adjacency_bonus (0..2)
+             - domain_modifiers
+             - unit_support (Herald/Guardian effects)
+             + shadow_penalty (if Corrupted +1)
+
+If Divinity >= capture_cost → spend → success.
+On success: target.owner = player
+            target.stability = max(1, target.stability - 1)  // struggle leaves it shaky
+            event hooks fire (e.g., Life gains Faith, Death spawns Wight, etc.)
+On fail (insufficient D): no partial. (Optional variant: partial progress meter.)
+
+4.3 Sanctify
+·	Cost: 6 − domain_synergy (usually −1 on favored tiles).
+·	Effects: set tile.sanctified=true, tile.domain = player.domain, tile.divinity_yield += 1, tile.stability += 1 (cap 10), Shadow spread chance −50%.
+·	Cultivator reduces cost by −1D.
+4.4 Shadow Spread (neutral faction)
+·	Each Corrupted tile attempts to spread to each neighbor once per turn.
+Probability per neighbor:
+p = BASE (0.10)
+  + 0.05 * corrupted_neighbors
+  - 0.03 * sanctified_neighbors
+  - (0.05 if adjacent Warden)
+  - (0.25 if neighbor.owner.domain == Order)  // Order passive
+  - relic_or_event_modifiers
+clamp to [0.02, 0.60]
+
+·	On success: neighbor gains Corruption (0→1).
+·	At Corruption 2, tile flips to Shadow (owner = Shadow, stability = 3).
+·	Purify removes one step; Sanctify removes all and halves future spread chance.
+Shadow Alignment Meter (global):
+·	When you Aid Shadow (via Death/Chaos events, or spend Shadow Energy to help resolve Shadow quests), gain Alignment.
+·	Reaching 100 triggers Shadow Accord Victory (narrative: you become its chosen balance‑keeper).
+4.5 AI (Utility‑based, data‑driven)
+Each turn, AI generates candidate actions and scores them:
+utility(action) =
+  w1 * victory_progress_delta
++ w2 * economy_gain (divinity_yield, faith/turn)
++ w3 * defense_gain (stability/aegis estimate)
++ w4 * risk (shadow pressure nearby, enemy proximity)
++ w5 * domain_synergy (terrain, passive triggers)
++ w6 * opportunity (events/ruins)
++ noise(ε)  // for variety
+
+AI personalities = sets of weights (Aggressor, Turtler, Opportunist, Balanced).
+ Difficulty modifies Divinity income, fog advantages, and Shadow cooperation.
+5) UI/UX Flow (mobile)
+Main Menu → New Run → Setup
+·	Choose Domain (carousel).
+·	Toggles: Map size, Tile richness, Shadow aggression, Win conditions (Relic Ascension, Encircle), AI # and personality.
+In‑Run HUD
+·	Top bar: Turn, Divinity (big), Faith, Shadow Energy, Aegis (shield icon).
+·	Left column: big buttons (Explore, Capture, Manage, Sanctify, Units, Miracles, End Turn).
+·	Right flyout: Objectives, Relics, Active Events.
+·	Bottom: unit cards when selected; tile tooltip on tap.
+Tile Panel (tap)
+·	Owner, Stability bar, Corruption pips, Yield, Type, Domain attunement.
+·	Contextual actions (Capture/Fortify/Purify/Sanctify/Build Shrine).
+End Turn Summary
+·	Gained Divinity, Faith changes, Shadow spread maplets, events resolved, victory progress bars.
+Wireframe (ASCII)
+┌─────────────────────────────────────────────────────────┐
+│ Divinity: 12  Faith: 3  Shadow: 1  Aegis: 4   Turn 7   │
+├───Actions───────────────────────┬───────────────Info────┤
+│ [Explore] [Capture] [Manage]    │ Objectives:            │
+│ [Sanctify] [Units] [Miracles]   │  - 75% Control: 43%    │
+│ [End Turn]                      │  - Sanctify Sites: 3/6 │
+├─────────────────────────────────┼────────────────────────┤
+│                 Map (pinch-zoom, drag)                   │
+│  ◼ ◼ ~ ~ ^ ^ ^                                           │
+│  ...                                                     │
+├─────────────────────────────────┴────────────────────────┤
+│ Tile: Swamp (Unowned)  Move:3  Stability:1  Yield:+0     │
+│ Actions: [Capture 6D] [Sanctify 5D] [Info]               │
+└──────────────────────────────────────────────────────────┘
+
+6) Data Schema (JSON) & Class Skeletons (Unity)
+6.1 JSON Schemas (excerpt)
+TileType
+{
+  "id": "forest",
+  "name": "Forest",
+  "move_cost": 2,
+  "impassable": false,
+  "base_stability": 2,
+  "divinity_yield": 0,
+  "tags": ["biome","earth_synergy"],
+  "on_capture_events": [],
+  "visual_variants": ["forest_a","forest_b"]
+}
+
+Domain
+{
+  "id": "fire",
+  "name": "Fire",
+  "passive": {
+    "modifiers": [
+      {"type": "capture_cost_delta_on_tags", "tags":["desert","hill"], "delta": -1},
+      {"type": "volcano_adjacency_penalty","delta": -1}
+    ]
+  },
+  "minor_power": {"id":"blazing_step","cost_divinity":2, "effect":"+1_move"},
+  "major_rite": {"id":"inferno","cost_divinity":8, "effect_area":"3x3","stability_delta":-2}
+}
+
+Unit
+{
+  "id":"explorer",
+  "name":"Explorer",
+  "cost_divinity":2,
+  "move":3,
+  "perception":1,
+  "abilities":[]
+}
+
+Event (tile)
+{
+  "id":"ancient_ruin",
+  "triggers":["on_reveal"],
+  "conditions":[{"type":"tile_tag","value":"ruin"}],
+  "outcomes":[
+    {"type":"grant_relic","weights":{"common":70,"rare":25,"mythic":5}},
+    {"type":"spawn_shadow","chance":0.2,"strength":1}
+  ]
+}
+
+Config
+{
+  "base_divinity": 6,
+  "capture_base_cost": 4,
+  "sanctify_base_cost": 6,
+  "manage_costs": {"fortify":3,"purify":3,"build_shrine":5},
+  "stability_cap": 10,
+  "shadow_spread": {"base":0.10,"per_corrupted_neighbor":0.05,"per_sanctified_neighbor":-0.03,
+                    "warden_adjacent":-0.05,"order_owner":-0.25,
+                    "min":0.02,"max":0.60}
+}
+
+Everything above is intentionally modular: add tags & effects instead of hard‑coding domain logic.
+6.2 Unity C# Skeleton (excerpt)
+// Enums
+public enum TileVisibility { Hidden, Seen, Visible }
+public enum Owner { Neutral, Player, AI1, AI2, Shadow }
+public enum ActionType { Explore, Capture, ManageFortify, ManagePurify, BuildShrine, Sanctify, Summon, Miracle }
+
+// Core Models
+[Serializable]
+public class Tile {
+    public Vector2Int pos;
+    public string tileTypeId;
+    public Owner owner = Owner.Neutral;
+    public int stability;
+    public int corruption; // 0..2
+    public bool sanctified;
+    public string domainId; // if sanctified
+    public TileVisibility visibility = TileVisibility.Hidden;
+
+    // derived
+    public int MoveCost => Database.TileTypes[tileTypeId].move_cost;
+    public bool Impassable => Database.TileTypes[tileTypeId].impassable;
+    public int DivinityYield => Database.TileTypes[tileTypeId].divinity_yield + (sanctified ? 1 : 0);
+}
+
+[Serializable]
+public class Unit {
+    public string unitId;
+    public Owner owner;
+    public Vector2Int pos;
+    public int moveLeft;
+    public int perception;
+}
+
+// Player State
+public class PlayerState {
+    public Owner owner;
+    public string domainId;
+    public int divinity;
+    public int faith;
+    public int shadowEnergy;
+    public int aegis;
+    public List<Unit> units = new();
+    public HashSet<Vector2Int> ownedTiles = new();
+}
+
+// Turn Manager (simplified)
+public class TurnSystem : MonoBehaviour {
+    public int turn;
+
+    public void StartTurn(PlayerState p) {
+        turn++;
+        ApplyGlobalEvents();
+        ShadowSpread();
+        p.divinity += CalculateDivinityIncome(p);
+        foreach (var u in p.units) u.moveLeft = Database.Units[u.unitId].move;
+    }
+
+    public void EndTurn(PlayerState p) {
+        p.aegis = p.divinity / 2;
+        p.divinity = 0;
+        ApplyDecay();
+        CheckVictory();
+        NextPlayer();
+    }
+}
+
+// Capture resolution
+public static class CaptureSystem {
+    public static bool TryCapture(PlayerState p, Tile t) {
+        int adjOwned = Grid.Neighbors(t.pos).Count(n => Game.GetTile(n).owner == p.owner);
+        int adjacencyBonus = (adjOwned >= 4) ? 2 : (adjOwned >=2 ? 1 : 0);
+
+        int cost = Config.CaptureBaseCost + t.stability - adjacencyBonus
+                   + ShadowPenalty(t) + DomainModifiers(p, t);
+        if (p.divinity < cost) return false;
+        p.divinity -= cost;
+
+        t.owner = p.owner;
+        t.stability = Math.Max(1, t.stability - 1);
+        EventBus.Publish(new TileCapturedEvent(p, t));
+        return true;
+    }
+}
+
+(You’d also scaffold Database loaders for JSON, EventBus, AIController, MapGenerator, and UI views.)
+7) Procedural Map Generation (MVP)
+1.	Height noise (Perlin): set Mountains (threshold high), Water/Coast (low).
+2.	Moisture noise: set Swamp when moisture high & height low; Forest when mid.
+3.	Feature passes: scatter Villages, Sacred Wells, Ruins with min distance constraints.
+4.	Domain attunement: none initially (becomes player-driven).
+5.	Shadow seeds: pick N random tiles away from spawn; set corruption=2 or owner=Shadow.
+Pseudocode
+# conceptual
+for each cell:
+    h = perlin(x*H, y*H)
+    m = perlin(x*M, y*M)
+    if h > 0.75: tile = Mountain
+    elif h < 0.25: tile = Water
+    elif m > 0.75: tile = Swamp
+    elif m > 0.55: tile = Forest
+    elif h > 0.55: tile = Hill
+    elif m < 0.20: tile = Desert
+    else: tile = Plains
+place_features("village", count=mapArea*0.02, minDist=3)
+place_features("sacred_well", count=mapArea*0.01, minDist=5)
+place_features("ruin", count=mapArea*0.015, minDist=4)
+seed_shadow(count=mapArea*0.01)
+
+8) MVP Scope, Backlog & Tests
+8.1 MVP Feature Checklist
+·	Core systems: Turn System, Resources, Actions (Explore/Move, Capture, Manage: Fortify+Purify+Shrine, Sanctify, Summon, Miracles stub).
+·	Map: Generation, Tile data, Fog of War, Ownership, Stability, Corruption.
+·	Shadow: Spread algorithm, visual, Purify interaction.
+·	Domains: 8 passives + 8 minor powers + 8 major rites (data‑driven).
+·	Units: Explorer, Warden, Cultivator, Herald, Guardian, Avatar.
+·	AI: 1–3 personalities with utility weights.
+·	UI: Main Menu → Setup → Run → End Turn summary → Victory/Defeat.
+·	Save/Load: JSON snapshot of GameState.
+·	Audio & FX: light feedback on actions, tile attunements.
+·	Analytics hooks: run length, win type, average Divinity spent/action mix.
+8.2 Backlog (ordered)
+1.	Project skeleton (Unity 2D URP): data loaders, event bus, service locator.
+2.	Grid + Map Gen (prefabs for tiles, overlay layers; pooling).
+3.	Turn system & resources (UI + logic).
+4.	Fog of war (visibility layers, seen/hidden).
+5.	Actions (input → command queue → resolution; undo buffer for same‑turn mis‑taps).
+6.	Shadow system (spread pass, visuals).
+7.	Domains & abilities (hook into modifier system).
+8.	AI (action generator + utility scoring).
+9.	Victory/defeat states; Encircle rule toggle.
+10.	Content pass (events, relics, miracles; balancing tables).
+11.	Polish (tile attunement VFX, sound cues, tutorial, localization stubs).
+12.	QA & telemetry gates.
+8.3 Test Plan (examples)
+·	Unit tests: capture cost formula, sanctify effects, shadow spread bounds, fog logic.
+·	Property tests: no impassable tiles at spawn; sacred wells minimum spacing.
+·	Playtests: win rate per domain ~within a band; turns to first shrine; Shadow takeover rate at aggression levels.
+·	Performance: 60fps on mid‑range device with map N×N (set N in config); memory below budget (pooling tiles & VFX).
+9) Monetization & Pitch Essentials
+Monetization (pick one for MVP)
+·	Premium (recommended): One‑time purchase; cosmetics unlock by achievements (tile skins, domain VFX).
+·	F2P (later): Cosmetic shop only; optional DLC packs with new domains/biomes; no pay‑to‑win.
+Pitch bullets (for financing)
+·	Hook: “A bite‑size 4X‑meets‑roguelite where you become a god and the map reshapes to your will.”
+·	Market: Mobile strategy fans (Polytopia, Faeria, Slay the Spire audience overlap).
+·	Scope: Solo MVP, data‑driven for rapid expansion (Pantheon II & III ready).
+·	Edge: Shadow third‑party force + multi‑win conditions keep runs fresh; striking tile attunement art.
+·	Road to live: Vertical slice → content pass → soft launch with analytics.
+Appendices
+A) Sample Event Set (MVP)
+1.	Whispering Mire (Swamp; on reveal)
+o	50% +1 Faith/turn; 25% spawn Shadow (Corruption +1); 25% free Mist for 1 turn.
+1.	Pilgrim Procession (Village; on own)
+o	Gain 2 Faith now; next Purify −2D this turn.
+1.	Firebrand Comet (global; Fire biased)
+o	One random Mountain adjacent to you becomes Volcano (cosmetic) and applies −1 Stability to adjacent enemy tiles.
+1.	Equinox (global; Order vs Chaos)
+o	If Order domain: Sanctified tiles +1 Stability;
+o	If Chaos: free Rift once this turn;
+o	Others: reroll one tile event of choice (free).
+B) Example Miracles
+·	Sunlit Aegis (3 Faith): +3 Aegis immediately.
+·	Tide Reversal (5 Faith): cancel Shadow spread this turn on a chosen 5×5 region.
+·	Path of Winds (4 Faith): your units ignore terrain move penalties this turn.
+C) Save/Load Snapshot (JSON)
+{
+  "turn": 12,
+  "config_id": "default",
+  "players": [
+    {"owner":"Player","domainId":"water","divinity":8,"faith":3,"aegis":2,"units":[...]}
+  ],
+  "map": {"width":40,"height":40,"tiles":[ /* serialized Tile objects */ ]},
+  "shadow_alignment": {"player": 62},
+  "victory_thresholds": {"control":0.75,"sanctify_sites":6,"shadow_accord":100},
+  "rng_seed": 834723
+}
+
+D) Content Authoring Rules of Thumb
+·	Stability caps at 10; no effect should exceed ±3 Stability at once.
+·	Divinity income should rise slowly (target +1 to +2 per 5 owned tiles; tune via JSON).
+·	Shadow spread shouldn’t exceed ~1–2 tiles/turn early unless set to High aggression.
+·	Each Domain’s total “power budget” per turn should be comparable (change via costs, cooldowns).
+What you can hand to a coder (or a code generator) today
+·	This document as the GDD/TSD baseline.
+·	The JSON schemas above as your content backbone.
+·	The Unity C# skeletons (models + systems), expanded with:
+o	Database loader (ScriptableObject or JSON).
+o	EventBus (C# Actions/Events).
+o	MapGenerator (Perlin noise; tile painter).
+o	AIController (utility scorers).
+o	UI prefabs: HUD, Tile Panel, Action Buttons.
+If you want, I can also produce:
+·	A starter Unity project file tree specification (folders, naming, scene setup).
+·	A balanced default content pack (JSON files for 8 domains, 10+ events, 10 tile types, 6 units).
+·	A tutorial script (3 guided turns that teach Explore → Capture → Sanctify → Manage).
+But even without that, this spec is complete enough for an engineer (or generator) to scaffold the MVP and start iterating on content and feel.
+
+

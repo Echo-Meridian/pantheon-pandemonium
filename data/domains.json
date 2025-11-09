@@ -1,0 +1,449 @@
+{
+  "domains": [
+    {
+      "id": "fire",
+      "type": "fire",
+      "name": "Fire",
+      "description": "Harness the primal force of flame and destruction",
+      "color": "#ef4444",
+      "passive": {
+        "id": "volcanic_fury",
+        "name": "Volcanic Fury",
+        "description": "Capture costs -1 on Desert/Hill tiles. Mountains become Volcanoes granting adjacent enemy -1 Stability during captures",
+        "modifiers": [
+          {
+            "type": "capture_cost",
+            "value": -1,
+            "condition": "on_desert_or_hill",
+            "tags": ["desert", "hills"]
+          },
+          {
+            "type": "stability",
+            "value": -1,
+            "condition": "volcano_adjacency",
+            "tags": ["adjacent_volcano"]
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "blazing_step",
+        "name": "Blazing Step",
+        "description": "Chosen unit gains +1 Move for this turn",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "unit",
+        "effects": [
+          {
+            "type": "grant_movement",
+            "value": 1,
+            "duration": 1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "inferno",
+        "name": "Inferno",
+        "description": "Burn target 3x3 area: -2 Stability to enemy tiles, Clear Swamps",
+        "cost": { "divinity": 8 },
+        "cooldown": 3,
+        "targetType": "area",
+        "areaSize": 3,
+        "effects": [
+          {
+            "type": "damage_stability",
+            "value": 2,
+            "targetTags": ["enemy"]
+          },
+          {
+            "type": "change_terrain",
+            "targetTags": ["swamp"],
+            "value": "plains"
+          }
+        ]
+      }
+    },
+    {
+      "id": "water",
+      "type": "water",
+      "name": "Water",
+      "description": "Flow like the tide and conceal in mist",
+      "color": "#3b82f6",
+      "passive": {
+        "id": "tidal_mastery",
+        "name": "Tidal Mastery",
+        "description": "Units move across Water at cost 1. Tiles adjacent to your Swamps give enemies -1 Perception",
+        "modifiers": [
+          {
+            "type": "move_cost",
+            "value": -1,
+            "condition": "on_water",
+            "tags": ["water", "coast"]
+          },
+          {
+            "type": "perception",
+            "value": -1,
+            "condition": "adjacent_to_owned_swamp",
+            "tags": ["enemy", "adjacent_swamp"]
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "mist",
+        "name": "Mist",
+        "description": "Place a 2-tile radius fog until next turn",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "areaSize": 2,
+        "effects": [
+          {
+            "type": "add_mist",
+            "duration": 1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "flood",
+        "name": "Flood",
+        "description": "Convert Plains to Swamp in a line; slows enemy movement",
+        "cost": { "divinity": 7 },
+        "cooldown": 3,
+        "targetType": "area",
+        "areaSize": 5,
+        "effects": [
+          {
+            "type": "change_terrain",
+            "targetTags": ["plains"],
+            "value": "swamp"
+          }
+        ]
+      }
+    },
+    {
+      "id": "earth",
+      "type": "earth",
+      "name": "Earth",
+      "description": "Stand firm with the strength of mountains",
+      "color": "#84cc16",
+      "passive": {
+        "id": "mountain_heart",
+        "name": "Mountain Heart",
+        "description": "+1 Stability on Forest/Hill you own. Fortify costs -1",
+        "modifiers": [
+          {
+            "type": "stability",
+            "value": 1,
+            "condition": "owned_forest_or_hill",
+            "tags": ["forest", "hills"]
+          },
+          {
+            "type": "fortify_cost",
+            "value": -1
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "stone_ward",
+        "name": "Stone Ward",
+        "description": "+1 Stability on a tile (cap 10)",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "add_stability",
+            "value": 1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "bulwark",
+        "name": "Bulwark",
+        "description": "Place a Fortification: +2 Stability, Shadow spread -50% on adjacent",
+        "cost": { "divinity": 6 },
+        "cooldown": 3,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "place_fortification"
+          },
+          {
+            "type": "add_stability",
+            "value": 2
+          },
+          {
+            "type": "shadow_resistance",
+            "value": 0.5,
+            "targetTags": ["adjacent"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "air",
+      "type": "air",
+      "name": "Air",
+      "description": "See all and move with the wind",
+      "color": "#06b6d4",
+      "passive": {
+        "id": "wind_sight",
+        "name": "Wind Sight",
+        "description": "+1 Perception radius from Hills you own. Explorers +1 Move",
+        "modifiers": [
+          {
+            "type": "perception",
+            "value": 1,
+            "condition": "on_owned_hill",
+            "tags": ["hills"]
+          },
+          {
+            "type": "move_cost",
+            "value": -1,
+            "condition": "unit_type_explorer",
+            "tags": ["explorer"]
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "gale",
+        "name": "Gale",
+        "description": "Push fog 1 tile outward around a unit (reveal ring)",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "unit",
+        "effects": [
+          {
+            "type": "reveal_area",
+            "value": 1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "tempest",
+        "name": "Tempest",
+        "description": "Enemy units in 3x3 can't move next turn. Remove Mist",
+        "cost": { "divinity": 6 },
+        "cooldown": 3,
+        "targetType": "area",
+        "areaSize": 3,
+        "effects": [
+          {
+            "type": "prevent_movement",
+            "duration": 1,
+            "targetTags": ["enemy"]
+          },
+          {
+            "type": "remove_mist"
+          }
+        ]
+      }
+    },
+    {
+      "id": "life",
+      "type": "life",
+      "name": "Life",
+      "description": "Nurture growth and protect the sanctified",
+      "color": "#10b981",
+      "passive": {
+        "id": "verdant_blessing",
+        "name": "Verdant Blessing",
+        "description": "+1 Faith from Villages. Purify costs -1",
+        "modifiers": [
+          {
+            "type": "faith_income",
+            "value": 1,
+            "condition": "from_village",
+            "tags": ["village"]
+          },
+          {
+            "type": "purify_cost",
+            "value": -1
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "bloom",
+        "name": "Bloom",
+        "description": "Target tile yields +1 Faith/turn this game",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "grant_faith",
+            "value": 1,
+            "duration": -1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "sanctuary",
+        "name": "Sanctuary",
+        "description": "Global: your Sanctified tiles gain +1 Stability",
+        "cost": { "divinity": 7 },
+        "cooldown": 4,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "add_stability",
+            "value": 1,
+            "targetTags": ["sanctified", "owned"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "death",
+      "type": "death",
+      "name": "Death",
+      "description": "Command the fallen and harvest corruption",
+      "color": "#7c3aed",
+      "passive": {
+        "id": "pale_legion",
+        "name": "Pale Legion",
+        "description": "Capturing a tile spawns Wight (1-turn blocker) on it",
+        "modifiers": [
+          {
+            "type": "spawn_on_capture",
+            "value": "wight"
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "wither",
+        "name": "Wither",
+        "description": "Tile -1 Stability",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "damage_stability",
+            "value": 1
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "pale_harvest",
+        "name": "Pale Harvest",
+        "description": "Convert 2 Corrupted tiles into Shadow Energy + gain 1 Relic roll",
+        "cost": { "divinity": 7 },
+        "cooldown": 3,
+        "targetType": "area",
+        "areaSize": 2,
+        "effects": [
+          {
+            "type": "harvest_corruption",
+            "value": 2
+          },
+          {
+            "type": "grant_relic_roll",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "order",
+      "type": "order",
+      "name": "Order",
+      "description": "Impose structure and resist chaos",
+      "color": "#eab308",
+      "passive": {
+        "id": "divine_mandate",
+        "name": "Divine Mandate",
+        "description": "Your tiles resist Shadow (-25% spread chance)",
+        "modifiers": [
+          {
+            "type": "shadow_resistance",
+            "value": 0.25,
+            "condition": "owned_tiles"
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "edict",
+        "name": "Edict",
+        "description": "Set a tile's Stability to at least 3",
+        "cost": { "divinity": 2 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "set_stability",
+            "value": 3
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "mandate",
+        "name": "Mandate",
+        "description": "Next Capture you attempt this turn is auto-success if cost ≤6",
+        "cost": { "divinity": 6 },
+        "cooldown": 3,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "guaranteed_capture",
+            "value": 6,
+            "duration": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "chaos",
+      "type": "chaos",
+      "name": "Chaos",
+      "description": "Embrace randomness and bend reality",
+      "color": "#ec4899",
+      "passive": {
+        "id": "entropy_dance",
+        "name": "Entropy Dance",
+        "description": "+10% chance random positive event each turn (also +5% negative)",
+        "modifiers": [
+          {
+            "type": "event_chance_positive",
+            "value": 0.1
+          },
+          {
+            "type": "event_chance_negative",
+            "value": 0.05
+          }
+        ]
+      },
+      "minorPower": {
+        "id": "jolt",
+        "name": "Jolt",
+        "description": "Re-roll a pending event at target tile",
+        "cost": { "divinity": 1 },
+        "cooldown": 0,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "reroll_event"
+          }
+        ]
+      },
+      "majorRite": {
+        "id": "rift",
+        "name": "Rift",
+        "description": "Teleport a unit within 5 tiles; or random Relic roll with 25% corruption",
+        "cost": { "divinity": 7 },
+        "cooldown": 3,
+        "targetType": "unit",
+        "effects": [
+          {
+            "type": "teleport",
+            "value": 5
+          },
+          {
+            "type": "grant_relic_roll",
+            "value": 1,
+            "condition": "25_percent_corruption"
+          }
+        ]
+      }
+    }
+  ]
+}

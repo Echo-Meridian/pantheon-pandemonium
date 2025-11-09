@@ -1,0 +1,185 @@
+{
+  "units": [
+    {
+      "id": "explorer",
+      "type": "explorer",
+      "name": "Explorer",
+      "description": "Cheap reconnaissance unit with high mobility",
+      "cost": { "divinity": 2 },
+      "movePoints": 3,
+      "perception": 1,
+      "abilities": [],
+      "stats": {
+        "health": 1,
+        "defense": 0
+      },
+      "tags": ["scout", "basic"]
+    },
+    {
+      "id": "warden",
+      "type": "warden",
+      "name": "Warden",
+      "description": "Stationary defense unit that adds stability to occupied tile",
+      "cost": { "divinity": 3 },
+      "movePoints": 1,
+      "perception": 0,
+      "abilities": [
+        {
+          "id": "defensive_aura",
+          "name": "Defensive Aura",
+          "description": "+1 Stability to tile occupied",
+          "passive": true
+        }
+      ],
+      "stats": {
+        "health": 3,
+        "defense": 2
+      },
+      "tags": ["defender", "basic"]
+    },
+    {
+      "id": "cultivator",
+      "type": "cultivator",
+      "name": "Cultivator",
+      "description": "Support unit that can Sanctify and Purify at reduced cost",
+      "cost": { "divinity": 3 },
+      "movePoints": 1,
+      "perception": 0,
+      "abilities": [
+        {
+          "id": "blessed_touch",
+          "name": "Blessed Touch",
+          "description": "Sanctify and Purify cost -1 Divinity",
+          "passive": true
+        }
+      ],
+      "stats": {
+        "health": 2,
+        "defense": 1
+      },
+      "tags": ["support", "basic"]
+    },
+    {
+      "id": "herald",
+      "type": "herald",
+      "name": "Herald",
+      "description": "Influence unit that aids in capturing tiles",
+      "cost": { "divinity": 4 },
+      "movePoints": 2,
+      "perception": 1,
+      "abilities": [
+        {
+          "id": "influence",
+          "name": "Influence",
+          "description": "Add +1 Capture adjacency bonus once per turn",
+          "cooldown": 1,
+          "cost": { "divinity": 0 }
+        }
+      ],
+      "stats": {
+        "health": 2,
+        "defense": 1
+      },
+      "tags": ["support", "influence"]
+    },
+    {
+      "id": "guardian",
+      "type": "guardian",
+      "name": "Guardian",
+      "description": "Heavy defender that reduces capture damage to adjacent tiles",
+      "cost": { "divinity": 5 },
+      "movePoints": 2,
+      "perception": 1,
+      "abilities": [
+        {
+          "id": "protective_stance",
+          "name": "Protective Stance",
+          "description": "Reduces Capture damage to your tiles by 1 when adjacent",
+          "passive": true
+        }
+      ],
+      "stats": {
+        "health": 4,
+        "defense": 3
+      },
+      "tags": ["defender", "heavy"]
+    },
+    {
+      "id": "elemental_avatar",
+      "type": "elemental_avatar",
+      "name": "Elemental Avatar",
+      "description": "Domain-specific ultimate unit with powerful ability",
+      "cost": { "divinity": 8 },
+      "movePoints": 2,
+      "perception": 2,
+      "abilities": [
+        {
+          "id": "domain_ultimate",
+          "name": "Domain Ultimate",
+          "description": "Powerful domain-specific ability (free once every 3 turns)",
+          "cooldown": 3,
+          "cost": { "divinity": 0 }
+        }
+      ],
+      "stats": {
+        "health": 5,
+        "defense": 2
+      },
+      "tags": ["ultimate", "domain_specific"]
+    },
+    {
+      "id": "shadowborn",
+      "type": "shadowborn",
+      "name": "Shadowborn",
+      "description": "Hybrid unit that uses Shadow Energy and moves through mist",
+      "cost": {
+        "divinity": 4,
+        "shadowEnergy": 1
+      },
+      "movePoints": 2,
+      "perception": 1,
+      "abilities": [
+        {
+          "id": "mist_walker",
+          "name": "Mist Walker",
+          "description": "Can walk through Mist as if Plains",
+          "passive": true
+        },
+        {
+          "id": "corrupt_strike",
+          "name": "Corrupt Strike",
+          "description": "Add 1 corruption to target tile",
+          "cooldown": 2,
+          "cost": { "shadowEnergy": 1 }
+        }
+      ],
+      "stats": {
+        "health": 3,
+        "defense": 1
+      },
+      "tags": ["hybrid", "shadow"]
+    },
+    {
+      "id": "wight",
+      "type": "wight",
+      "name": "Wight",
+      "description": "Temporary undead blocker spawned by Death domain",
+      "cost": { "divinity": 0 },
+      "movePoints": 0,
+      "perception": 0,
+      "abilities": [
+        {
+          "id": "ephemeral",
+          "name": "Ephemeral",
+          "description": "Dies after 1 turn",
+          "passive": true
+        }
+      ],
+      "stats": {
+        "health": 1,
+        "defense": 1
+      },
+      "tags": ["temporary", "spawned", "death"]
+    }
+  ]
+}
