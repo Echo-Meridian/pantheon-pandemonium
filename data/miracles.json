@@ -1,0 +1,472 @@
+{
+  "miracles": [
+    {
+      "id": "divine_intervention",
+      "name": "Divine Intervention",
+      "rarity": "common",
+      "description": "Gain a burst of divine energy",
+      "flavorText": "Your power manifests in a brilliant flash.",
+      "cost": {
+        "faith": 5
+      },
+      "effects": [
+        {
+          "type": "grant_divinity",
+          "value": 10
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "mass_reveal",
+      "name": "Mass Reveal",
+      "rarity": "common",
+      "description": "Reveal a large portion of the map",
+      "flavorText": "The fog parts before your divine sight.",
+      "cost": {
+        "faith": 6
+      },
+      "effects": [
+        {
+          "type": "reveal_tiles",
+          "value": 20,
+          "targetTags": ["random_hidden"]
+        }
+      ],
+      "usesPerGame": 2
+    },
+    {
+      "id": "sanctified_ground",
+      "name": "Sanctified Ground",
+      "rarity": "common",
+      "description": "Instantly sanctify 3 tiles",
+      "flavorText": "Your domain spreads like wildfire.",
+      "cost": {
+        "faith": 8
+      },
+      "effects": [
+        {
+          "type": "mass_sanctify",
+          "targetTags": ["owned", "unsanctified", "random_3"],
+          "value": 3
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "zealous_followers",
+      "name": "Zealous Followers",
+      "rarity": "common",
+      "description": "Your followers' faith burns bright",
+      "flavorText": "They sing your praises with fervor.",
+      "cost": {
+        "faith": 7
+      },
+      "effects": [
+        {
+          "type": "grant_faith",
+          "value": 12
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "fortify_realm",
+      "name": "Fortify Realm",
+      "rarity": "common",
+      "description": "All your tiles gain stability",
+      "flavorText": "Your domain becomes unshakeable.",
+      "cost": {
+        "faith": 10
+      },
+      "effects": [
+        {
+          "type": "add_stability",
+          "targetTags": ["owned"],
+          "value": 2
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "rapid_expansion",
+      "name": "Rapid Expansion",
+      "rarity": "rare",
+      "description": "Capture 3 adjacent tiles for free",
+      "flavorText": "Your influence spreads unstoppably.",
+      "cost": {
+        "faith": 12
+      },
+      "effects": [
+        {
+          "type": "free_captures",
+          "targetTags": ["adjacent_owned"],
+          "value": 3
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "purging_light",
+      "name": "Purging Light",
+      "rarity": "rare",
+      "description": "Remove all corruption from the map",
+      "flavorText": "Darkness cannot stand before true divinity.",
+      "cost": {
+        "faith": 15
+      },
+      "effects": [
+        {
+          "type": "remove_corruption",
+          "targetTags": ["corrupted"],
+          "value": 2
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "avatar_summoning",
+      "name": "Avatar Summoning",
+      "rarity": "rare",
+      "description": "Summon an Elemental Avatar for free",
+      "flavorText": "Your domain's champion walks the earth.",
+      "cost": {
+        "faith": 14
+      },
+      "effects": [
+        {
+          "type": "spawn_unit",
+          "unitType": "elemental_avatar",
+          "targetTags": ["owned", "random_1"],
+          "value": 1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "earthquake",
+      "name": "Earthquake",
+      "rarity": "rare",
+      "description": "Destabilize enemy territories",
+      "flavorText": "The ground trembles at your command.",
+      "cost": {
+        "faith": 13
+      },
+      "effects": [
+        {
+          "type": "damage_stability",
+          "targetTags": ["enemy"],
+          "value": 3
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "divine_shield",
+      "name": "Divine Shield",
+      "rarity": "rare",
+      "description": "Your tiles cannot be captured for 2 turns",
+      "flavorText": "An impenetrable barrier protects your realm.",
+      "cost": {
+        "faith": 16
+      },
+      "effects": [
+        {
+          "type": "grant_invulnerability",
+          "targetTags": ["owned"],
+          "duration": 2
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "shadow_banishment",
+      "name": "Shadow Banishment",
+      "rarity": "rare",
+      "description": "Push back Shadow influence dramatically",
+      "flavorText": "The darkness recoils from your power.",
+      "cost": {
+        "faith": 14,
+        "divinity": 5
+      },
+      "effects": [
+        {
+          "type": "reduce_shadow_influence",
+          "value": 30
+        },
+        {
+          "type": "remove_corruption",
+          "targetTags": ["shadow_owned"],
+          "value": 1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "domain_resonance",
+      "name": "Domain Resonance",
+      "rarity": "rare",
+      "description": "Use your Major Rite for free this turn",
+      "flavorText": "Your domain pulses with limitless energy.",
+      "cost": {
+        "faith": 15
+      },
+      "effects": [
+        {
+          "type": "free_major_rite",
+          "value": 1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "ascension",
+      "name": "Ascension",
+      "rarity": "legendary",
+      "description": "Take 2 extra turns immediately",
+      "flavorText": "Time bends to your divine will.",
+      "cost": {
+        "faith": 25,
+        "divinity": 10
+      },
+      "effects": [
+        {
+          "type": "grant_extra_turn",
+          "value": 2
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "genesis",
+      "name": "Genesis",
+      "rarity": "legendary",
+      "description": "Transform any 5x5 area into your preferred terrain",
+      "flavorText": "Remake the world in your image.",
+      "cost": {
+        "faith": 20
+      },
+      "effects": [
+        {
+          "type": "terraform_area",
+          "areaSize": 5,
+          "value": "domain_preferred"
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "divine_conquest",
+      "name": "Divine Conquest",
+      "rarity": "legendary",
+      "description": "Capture all tiles adjacent to your territory",
+      "flavorText": "Your domain expands in an unstoppable wave.",
+      "cost": {
+        "faith": 30
+      },
+      "effects": [
+        {
+          "type": "capture_all_adjacent",
+          "targetTags": ["adjacent_owned"]
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "apocalypse",
+      "name": "Apocalypse",
+      "rarity": "legendary",
+      "description": "Destroy all enemy shrines and fortifications",
+      "flavorText": "Let the old world burn.",
+      "cost": {
+        "faith": 28,
+        "shadowEnergy": 3
+      },
+      "effects": [
+        {
+          "type": "destroy_structures",
+          "targetTags": ["enemy", "shrine"],
+          "value": -1
+        },
+        {
+          "type": "destroy_structures",
+          "targetTags": ["enemy", "fortification"],
+          "value": -1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "unity_of_purpose",
+      "name": "Unity of Purpose",
+      "rarity": "legendary",
+      "description": "All units gain +2 Move for 3 turns",
+      "flavorText": "Your forces move as one.",
+      "cost": {
+        "faith": 18
+      },
+      "effects": [
+        {
+          "type": "grant_movement",
+          "targetTags": ["owned_units"],
+          "value": 2,
+          "duration": 3
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "shadow_pact",
+      "name": "Shadow Pact",
+      "rarity": "rare",
+      "description": "Convert all corrupted tiles to your ownership",
+      "flavorText": "The Shadow recognizes its true master.",
+      "cost": {
+        "shadowEnergy": 5
+      },
+      "effects": [
+        {
+          "type": "capture_corrupted",
+          "targetTags": ["corrupted"],
+          "value": -1
+        },
+        {
+          "type": "modify_shadow_alignment",
+          "value": 30
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "pilgrimage",
+      "name": "Pilgrimage",
+      "rarity": "common",
+      "description": "Gain Faith equal to your Sanctified tiles",
+      "flavorText": "The faithful journey to your holy sites.",
+      "cost": {
+        "divinity": 3
+      },
+      "effects": [
+        {
+          "type": "grant_faith_per_sanctified",
+          "value": 1
+        }
+      ],
+      "usesPerGame": 3
+    },
+    {
+      "id": "holy_crusade",
+      "name": "Holy Crusade",
+      "rarity": "rare",
+      "description": "Capture costs -3 for this turn",
+      "flavorText": "Your faithful march with righteous fury.",
+      "cost": {
+        "faith": 12
+      },
+      "effects": [
+        {
+          "type": "modify_capture_cost",
+          "value": -3,
+          "duration": 1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "vision_quest",
+      "name": "Vision Quest",
+      "rarity": "common",
+      "description": "Discover a random relic",
+      "flavorText": "The divine guides you to hidden treasures.",
+      "cost": {
+        "faith": 8
+      },
+      "effects": [
+        {
+          "type": "grant_relic",
+          "rarity": "random",
+          "value": 1
+        }
+      ],
+      "usesPerGame": 2
+    },
+    {
+      "id": "sanctuary",
+      "name": "Sanctuary",
+      "rarity": "rare",
+      "description": "Create a Sacred Well on an owned tile",
+      "flavorText": "A new wellspring of divinity emerges.",
+      "cost": {
+        "faith": 20
+      },
+      "effects": [
+        {
+          "type": "transform_tile",
+          "targetTags": ["owned", "plains"],
+          "newType": "sacred_well",
+          "value": 1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "plague_of_shadow",
+      "name": "Plague of Shadow",
+      "rarity": "rare",
+      "description": "Spread corruption to 5 enemy tiles",
+      "flavorText": "Darkness spreads at your command.",
+      "cost": {
+        "shadowEnergy": 4
+      },
+      "effects": [
+        {
+          "type": "add_corruption",
+          "targetTags": ["enemy", "random_5"],
+          "value": 1
+        },
+        {
+          "type": "modify_shadow_alignment",
+          "value": 15
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "rebirth",
+      "name": "Rebirth",
+      "rarity": "legendary",
+      "description": "Restore all destroyed shrines",
+      "flavorText": "What was lost shall be found again.",
+      "cost": {
+        "faith": 25
+      },
+      "effects": [
+        {
+          "type": "restore_shrines",
+          "targetTags": ["owned"],
+          "value": -1
+        }
+      ],
+      "usesPerGame": 1
+    },
+    {
+      "id": "cosmic_awareness",
+      "name": "Cosmic Awareness",
+      "rarity": "legendary",
+      "description": "Reveal the entire map permanently",
+      "flavorText": "Nothing is hidden from your sight.",
+      "cost": {
+        "faith": 22
+      },
+      "effects": [
+        {
+          "type": "reveal_tiles",
+          "targetTags": ["all_hidden"],
+          "value": -1,
+          "duration": -1
+        }
+      ],
+      "usesPerGame": 1
+    }
+  ]
+}

@@ -1,0 +1,360 @@
+{
+  "tileTypes": [
+    {
+      "id": "plains",
+      "type": "plains",
+      "name": "Plains",
+      "description": "Open grassland suitable for expansion",
+      "moveCost": 1,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["basic", "traversable"],
+      "domainSynergies": [],
+      "visualVariants": ["grass", "meadow", "steppe"],
+      "canBuildShrine": true,
+      "eventChance": 0.05
+    },
+    {
+      "id": "forest",
+      "type": "forest",
+      "name": "Forest",
+      "description": "Dense woodland that provides natural defense",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 2,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["natural", "defensive", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "earth",
+          "bonus": {
+            "type": "stability",
+            "value": 1,
+            "description": "+1 Stability when owned by Earth domain"
+          }
+        },
+        {
+          "domain": "life",
+          "bonus": {
+            "type": "faith_income",
+            "value": 1,
+            "description": "+1 Faith/turn when owned by Life domain"
+          }
+        }
+      ],
+      "visualVariants": ["pine", "oak", "jungle"],
+      "canBuildShrine": true,
+      "eventChance": 0.1
+    },
+    {
+      "id": "swamp",
+      "type": "swamp",
+      "name": "Swamp",
+      "description": "Treacherous wetlands that slow movement",
+      "moveCost": 3,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["natural", "difficult", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "water",
+          "bonus": {
+            "type": "perception_debuff_adjacent",
+            "value": -1,
+            "description": "Enemy units adjacent have -1 Perception"
+          }
+        },
+        {
+          "domain": "death",
+          "bonus": {
+            "type": "move_cost",
+            "value": -1,
+            "description": "Move cost reduced to 2 for Death domain"
+          }
+        }
+      ],
+      "visualVariants": ["murky", "foggy", "fetid"],
+      "canBuildShrine": false,
+      "eventChance": 0.08
+    },
+    {
+      "id": "hills",
+      "type": "hills",
+      "name": "Hills",
+      "description": "Elevated terrain with excellent sightlines",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 2,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["elevated", "defensive", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "air",
+          "bonus": {
+            "type": "perception",
+            "value": 1,
+            "description": "+1 Perception radius from this tile"
+          }
+        },
+        {
+          "domain": "earth",
+          "bonus": {
+            "type": "stability",
+            "value": 1,
+            "description": "+1 Stability when owned by Earth domain"
+          }
+        },
+        {
+          "domain": "fire",
+          "bonus": {
+            "type": "capture_cost",
+            "value": -1,
+            "description": "-1 Capture cost for Fire domain"
+          }
+        }
+      ],
+      "visualVariants": ["grassy", "rocky", "barren"],
+      "canBuildShrine": true,
+      "eventChance": 0.07
+    },
+    {
+      "id": "desert",
+      "type": "desert",
+      "name": "Desert",
+      "description": "Arid wasteland scorched by sun",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["arid", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "fire",
+          "bonus": {
+            "type": "capture_cost",
+            "value": -1,
+            "description": "-1 Capture cost for Fire domain"
+          }
+        }
+      ],
+      "visualVariants": ["sand", "dunes", "wasteland"],
+      "canBuildShrine": false,
+      "eventChance": 0.06
+    },
+    {
+      "id": "mountain",
+      "type": "mountain",
+      "name": "Mountain",
+      "description": "Towering peaks, impassable but majestic",
+      "moveCost": 999,
+      "impassable": true,
+      "baseStability": 10,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["impassable", "landmark"],
+      "domainSynergies": [
+        {
+          "domain": "fire",
+          "bonus": {
+            "type": "transform",
+            "value": "volcano",
+            "description": "Becomes Volcano when in Fire territory"
+          }
+        },
+        {
+          "domain": "air",
+          "bonus": {
+            "type": "transform",
+            "value": "snow_peak",
+            "description": "Becomes Snow Peak when in Air territory"
+          }
+        }
+      ],
+      "visualVariants": ["rocky", "snowy", "volcanic"],
+      "canBuildShrine": false,
+      "eventChance": 0.0
+    },
+    {
+      "id": "coast",
+      "type": "coast",
+      "name": "Coast",
+      "description": "Shallow waters along the shoreline",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["water", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "water",
+          "bonus": {
+            "type": "move_cost",
+            "value": -1,
+            "description": "Move cost reduced to 1 for Water domain"
+          }
+        }
+      ],
+      "visualVariants": ["beach", "rocky_shore", "tidal"],
+      "canBuildShrine": false,
+      "eventChance": 0.05
+    },
+    {
+      "id": "water",
+      "type": "water",
+      "name": "Water",
+      "description": "Deep water, difficult to traverse",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["water", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "water",
+          "bonus": {
+            "type": "move_cost",
+            "value": -1,
+            "description": "Move cost reduced to 1 for Water domain"
+          }
+        }
+      ],
+      "visualVariants": ["lake", "ocean", "river"],
+      "canBuildShrine": false,
+      "eventChance": 0.03
+    },
+    {
+      "id": "sacred_well",
+      "type": "sacred_well",
+      "name": "Sacred Well",
+      "description": "A mystical wellspring of divine power",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 2,
+      "divinityYield": 3,
+      "faithYield": 0,
+      "tags": ["special", "resource", "traversable", "sanctifiable"],
+      "domainSynergies": [],
+      "visualVariants": ["glowing", "ancient", "blessed"],
+      "canBuildShrine": false,
+      "eventChance": 0.2,
+      "uniqueConstraints": {
+        "minDistanceFromOthers": 8,
+        "maxPerMap": 4,
+        "guardsOnSpawn": true
+      }
+    },
+    {
+      "id": "village",
+      "type": "village",
+      "name": "Village",
+      "description": "A small settlement of faithful followers",
+      "moveCost": 1,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 1,
+      "tags": ["settlement", "resource", "traversable", "upgradeable"],
+      "domainSynergies": [
+        {
+          "domain": "life",
+          "bonus": {
+            "type": "faith_income",
+            "value": 1,
+            "description": "+1 additional Faith/turn for Life domain"
+          }
+        }
+      ],
+      "visualVariants": ["hamlet", "town", "outpost"],
+      "canBuildShrine": true,
+      "eventChance": 0.12,
+      "uniqueConstraints": {
+        "minDistanceFromOthers": 5,
+        "maxPerMap": 8
+      }
+    },
+    {
+      "id": "ancient_ruins",
+      "type": "ancient_ruins",
+      "name": "Ancient Ruins",
+      "description": "Crumbling remnants of a forgotten age",
+      "moveCost": 2,
+      "impassable": false,
+      "baseStability": 1,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["special", "event_trigger", "traversable"],
+      "domainSynergies": [
+        {
+          "domain": "chaos",
+          "bonus": {
+            "type": "event_chance",
+            "value": 0.1,
+            "description": "+10% chance for positive event when captured"
+          }
+        }
+      ],
+      "visualVariants": ["temple", "fortress", "monument"],
+      "canBuildShrine": true,
+      "eventChance": 0.8,
+      "uniqueConstraints": {
+        "minDistanceFromOthers": 6,
+        "maxPerMap": 6,
+        "alwaysHasEvent": true,
+        "eventTypes": ["relic", "miracle", "combat", "blessing"]
+      }
+    },
+    {
+      "id": "volcano",
+      "type": "volcano",
+      "name": "Volcano",
+      "description": "A mountain transformed by Fire domain's power",
+      "moveCost": 999,
+      "impassable": true,
+      "baseStability": 10,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["impassable", "landmark", "transformed", "fire"],
+      "domainSynergies": [],
+      "visualVariants": ["active", "dormant", "erupting"],
+      "canBuildShrine": false,
+      "eventChance": 0.0,
+      "transformedFrom": "mountain",
+      "adjacentEffect": {
+        "type": "stability_debuff_enemy",
+        "value": -1,
+        "description": "Enemy tiles adjacent have -1 Stability during captures"
+      }
+    },
+    {
+      "id": "snow_peak",
+      "type": "snow_peak",
+      "name": "Snow Peak",
+      "description": "A mountain blessed by Air domain's winds",
+      "moveCost": 999,
+      "impassable": true,
+      "baseStability": 10,
+      "divinityYield": 0,
+      "faithYield": 0,
+      "tags": ["impassable", "landmark", "transformed", "air"],
+      "domainSynergies": [],
+      "visualVariants": ["pristine", "windswept", "glacial"],
+      "canBuildShrine": false,
+      "eventChance": 0.0,
+      "transformedFrom": "mountain",
+      "adjacentEffect": {
+        "type": "perception_bonus",
+        "value": 2,
+        "description": "+2 Perception radius for adjacent Air domain units"
+      }
+    }
+  ]
+}

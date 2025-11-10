@@ -70,12 +70,14 @@ export const difficultyPresets = {
   },
 };
 
-// Map size presets
+// Map size presets (2-3 sizes for MVP with room for expansion)
 export const mapSizePresets = {
-  small: { width: 20, height: 20 },
-  medium: { width: 40, height: 40 },
-  large: { width: 60, height: 60 },
-  huge: { width: 80, height: 80 },
+  small: { width: 24, height: 24, tiles: 576 },
+  medium: { width: 36, height: 36, tiles: 1296 },
+  large: { width: 48, height: 48, tiles: 2304 },
+  // Future expansion options
+  // huge: { width: 64, height: 64, tiles: 4096 },
+  // epic: { width: 80, height: 80, tiles: 6400 },
 };
 
 // AI personality presets

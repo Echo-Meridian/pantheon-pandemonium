@@ -1,0 +1,522 @@
+{
+  "relics": [
+    {
+      "id": "ancient_compass",
+      "name": "Ancient Compass",
+      "rarity": "common",
+      "description": "Guides your explorers to hidden places",
+      "flavorText": "Its needle points not north, but to mystery.",
+      "passive": [
+        {
+          "type": "perception",
+          "value": 1,
+          "condition": "all_units"
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "blessed_chalice",
+      "name": "Blessed Chalice",
+      "rarity": "common",
+      "description": "Overflows with divine energy each turn",
+      "flavorText": "What it contains is never depleted.",
+      "passive": [
+        {
+          "type": "divinity_income",
+          "value": 1
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "shield_of_aegis",
+      "name": "Shield of Aegis",
+      "rarity": "common",
+      "description": "Enhances your defensive reserves",
+      "flavorText": "Forged from the first defense.",
+      "passive": [
+        {
+          "type": "aegis_multiplier",
+          "value": 0.5
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "prayer_beads",
+      "name": "Prayer Beads",
+      "rarity": "common",
+      "description": "Your followers' prayers grow stronger",
+      "flavorText": "Each bead holds a thousand devotions.",
+      "passive": [
+        {
+          "type": "faith_income",
+          "value": 1
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "stone_ward_charm",
+      "name": "Stone Ward Charm",
+      "rarity": "common",
+      "description": "Fortifications cost less to build",
+      "flavorText": "Stone obeys your will more readily.",
+      "passive": [
+        {
+          "type": "fortify_cost",
+          "value": -1
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "explorers_boots",
+      "name": "Explorer's Boots",
+      "rarity": "common",
+      "description": "Your units move more swiftly",
+      "flavorText": "They never wear out, no matter the terrain.",
+      "passive": [
+        {
+          "type": "move_cost",
+          "value": -1,
+          "condition": "all_units",
+          "tags": ["explorer"]
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "crystal_lens",
+      "name": "Crystal Lens",
+      "rarity": "rare",
+      "description": "Reveals hidden truths across the map",
+      "flavorText": "Reality bends through its facets.",
+      "passive": [
+        {
+          "type": "perception",
+          "value": 2,
+          "condition": "all_units"
+        }
+      ],
+      "active": {
+        "id": "far_sight",
+        "name": "Far Sight",
+        "description": "Reveal a 5x5 area anywhere on the map",
+        "cost": {
+          "divinity": 3
+        },
+        "cooldown": 3,
+        "targetType": "area",
+        "areaSize": 5,
+        "effects": [
+          {
+            "type": "reveal_tiles",
+            "value": 25
+          }
+        ]
+      },
+      "victoryPoints": 0
+    },
+    {
+      "id": "crown_of_dominion",
+      "name": "Crown of Dominion",
+      "rarity": "rare",
+      "description": "Captures are easier and more efficient",
+      "flavorText": "Those who see it know their new sovereign.",
+      "passive": [
+        {
+          "type": "capture_cost",
+          "value": -1
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "sanctified_banner",
+      "name": "Sanctified Banner",
+      "rarity": "rare",
+      "description": "Sanctifying tiles becomes less costly",
+      "flavorText": "Where it flies, your domain takes root.",
+      "passive": [
+        {
+          "type": "sanctify_cost",
+          "value": -2
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "phoenix_feather",
+      "name": "Phoenix Feather",
+      "rarity": "rare",
+      "description": "Burns away corruption with divine fire",
+      "flavorText": "Even from ashes, light persists.",
+      "passive": [
+        {
+          "type": "purify_cost",
+          "value": -1
+        }
+      ],
+      "active": {
+        "id": "cleansing_flame",
+        "name": "Cleansing Flame",
+        "description": "Remove all corruption from a 3x3 area",
+        "cost": {
+          "divinity": 4
+        },
+        "cooldown": 4,
+        "targetType": "area",
+        "areaSize": 3,
+        "effects": [
+          {
+            "type": "remove_corruption",
+            "targetTags": ["corrupted"],
+            "value": 2
+          }
+        ]
+      },
+      "victoryPoints": 0
+    },
+    {
+      "id": "shadow_amulet",
+      "name": "Shadow Amulet",
+      "rarity": "rare",
+      "description": "Harness the power of corruption",
+      "flavorText": "Darkness need not be your enemy.",
+      "passive": [
+        {
+          "type": "shadow_energy_income",
+          "value": 1
+        }
+      ],
+      "active": {
+        "id": "embrace_shadow",
+        "name": "Embrace Shadow",
+        "description": "Convert 1 Shadow Energy to 5 Divinity",
+        "cost": {
+          "shadowEnergy": 1
+        },
+        "cooldown": 0,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "grant_divinity",
+            "value": 5
+          }
+        ]
+      },
+      "victoryPoints": 0
+    },
+    {
+      "id": "staff_of_seasons",
+      "name": "Staff of Seasons",
+      "rarity": "rare",
+      "description": "Command the cycle of growth and decay",
+      "flavorText": "Spring and winter dance at your command.",
+      "passive": [
+        {
+          "type": "faith_income",
+          "value": 2
+        }
+      ],
+      "active": {
+        "id": "seasonal_blessing",
+        "name": "Seasonal Blessing",
+        "description": "All your tiles gain +1 Stability",
+        "cost": {
+          "divinity": 6
+        },
+        "cooldown": 5,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "add_stability",
+            "targetTags": ["owned"],
+            "value": 1
+          }
+        ]
+      },
+      "victoryPoints": 0
+    },
+    {
+      "id": "book_of_eons",
+      "name": "Book of Eons",
+      "rarity": "mythic",
+      "description": "Contains the accumulated wisdom of ages",
+      "flavorText": "Every page whispers secrets of creation.",
+      "passive": [
+        {
+          "type": "divinity_income",
+          "value": 3
+        },
+        {
+          "type": "faith_income",
+          "value": 2
+        }
+      ],
+      "active": {
+        "id": "rewrite_fate",
+        "name": "Rewrite Fate",
+        "description": "Undo the last turn's Shadow spread",
+        "cost": {
+          "faith": 10
+        },
+        "cooldown": 8,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "reverse_shadow_spread",
+            "value": 1
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "world_tree_seed",
+      "name": "World Tree Seed",
+      "rarity": "mythic",
+      "description": "Plant the seed of cosmic order",
+      "flavorText": "From it, all reality branches.",
+      "passive": [
+        {
+          "type": "stability",
+          "value": 2,
+          "condition": "all_owned_tiles"
+        },
+        {
+          "type": "shadow_resistance",
+          "value": 0.3
+        }
+      ],
+      "active": {
+        "id": "roots_of_eternity",
+        "name": "Roots of Eternity",
+        "description": "Sanctify a 5x5 area instantly",
+        "cost": {
+          "divinity": 10
+        },
+        "cooldown": 10,
+        "targetType": "area",
+        "areaSize": 5,
+        "effects": [
+          {
+            "type": "mass_sanctify",
+            "value": 25
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "void_heart",
+      "name": "Void Heart",
+      "rarity": "mythic",
+      "description": "Embody the Shadow's true nature",
+      "flavorText": "In darkness, there is neither good nor evil—only power.",
+      "passive": [
+        {
+          "type": "shadow_energy_income",
+          "value": 2
+        },
+        {
+          "type": "corruption_immunity",
+          "value": 1
+        }
+      ],
+      "active": {
+        "id": "shadow_ascension",
+        "name": "Shadow Ascension",
+        "description": "Gain +50 Shadow Alignment instantly",
+        "cost": {
+          "shadowEnergy": 5
+        },
+        "cooldown": 15,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "modify_shadow_alignment",
+            "value": 50
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "pantheon_seal",
+      "name": "Pantheon Seal",
+      "rarity": "mythic",
+      "description": "Mark of a true god in ascension",
+      "flavorText": "The final key to transcendence.",
+      "passive": [
+        {
+          "type": "divinity_income",
+          "value": 4
+        },
+        {
+          "type": "capture_cost",
+          "value": -2
+        }
+      ],
+      "active": {
+        "id": "divine_mandate",
+        "name": "Divine Mandate",
+        "description": "Capture any tile for free (once per game)",
+        "cost": {
+          "divinity": 0
+        },
+        "cooldown": -1,
+        "isConsumed": true,
+        "targetType": "tile",
+        "effects": [
+          {
+            "type": "forced_capture",
+            "value": 1
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "hourglass_of_infinity",
+      "name": "Hourglass of Infinity",
+      "rarity": "mythic",
+      "description": "Manipulate the flow of time itself",
+      "flavorText": "Sand flows both ways within.",
+      "passive": [
+        {
+          "type": "aegis_multiplier",
+          "value": 1.0
+        }
+      ],
+      "active": {
+        "id": "temporal_rewind",
+        "name": "Temporal Rewind",
+        "description": "Take an extra turn immediately",
+        "cost": {
+          "divinity": 15,
+          "faith": 10
+        },
+        "cooldown": -1,
+        "isConsumed": true,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "grant_extra_turn",
+            "value": 1
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "mirror_of_domains",
+      "name": "Mirror of Domains",
+      "rarity": "mythic",
+      "description": "Reflects and amplifies your domain's power",
+      "flavorText": "Within it, you see what you could become.",
+      "passive": [
+        {
+          "type": "domain_passive_amplify",
+          "value": 0.5
+        }
+      ],
+      "active": {
+        "id": "domain_echo",
+        "name": "Domain Echo",
+        "description": "Use your Major Rite twice this turn",
+        "cost": {
+          "faith": 8
+        },
+        "cooldown": 12,
+        "targetType": "global",
+        "effects": [
+          {
+            "type": "duplicate_major_rite",
+            "value": 1
+          }
+        ]
+      },
+      "victoryPoints": 1
+    },
+    {
+      "id": "orb_of_conquest",
+      "name": "Orb of Conquest",
+      "rarity": "rare",
+      "description": "Accelerates territorial expansion",
+      "flavorText": "The world shrinks before your ambition.",
+      "passive": [
+        {
+          "type": "capture_cost",
+          "value": -1
+        },
+        {
+          "type": "adjacency_bonus",
+          "value": 1
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "totem_of_resilience",
+      "name": "Totem of Resilience",
+      "rarity": "rare",
+      "description": "Your lands resist outside influence",
+      "flavorText": "Carved from wood that does not burn.",
+      "passive": [
+        {
+          "type": "stability",
+          "value": 1,
+          "condition": "all_owned_tiles"
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "gamblers_die",
+      "name": "Gambler's Die",
+      "rarity": "common",
+      "description": "Chaos favors the bold",
+      "flavorText": "It never rolls the same way twice.",
+      "passive": [
+        {
+          "type": "event_chance_positive",
+          "value": 0.05
+        },
+        {
+          "type": "event_chance_negative",
+          "value": 0.03
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    },
+    {
+      "id": "martyrs_relic",
+      "name": "Martyr's Relic",
+      "rarity": "common",
+      "description": "Sacrifice empowers faith",
+      "flavorText": "Their devotion lives on.",
+      "passive": [
+        {
+          "type": "faith_on_tile_lost",
+          "value": 2
+        }
+      ],
+      "active": null,
+      "victoryPoints": 0
+    }
+  ]
+}

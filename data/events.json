@@ -1,0 +1,752 @@
+{
+  "events": [
+    {
+      "id": "ruin_relic_discovery",
+      "category": "ruin",
+      "name": "Ancient Treasure",
+      "description": "You discover a powerful relic among the ruins",
+      "triggers": ["capture_ruins"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 60,
+          "description": "A common relic lies within",
+          "effects": [
+            {
+              "type": "grant_relic",
+              "rarity": "common",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "weight": 30,
+          "description": "A rare artifact reveals itself",
+          "effects": [
+            {
+              "type": "grant_relic",
+              "rarity": "rare",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "weight": 10,
+          "description": "A mythic treasure of immense power!",
+          "effects": [
+            {
+              "type": "grant_relic",
+              "rarity": "mythic",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ruin_guardian",
+      "category": "ruin",
+      "name": "Ruin Guardian",
+      "description": "An ancient protector challenges your claim",
+      "triggers": ["capture_ruins"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 40,
+          "description": "You overcome the guardian and gain its blessing",
+          "effects": [
+            {
+              "type": "grant_divinity",
+              "value": 5
+            },
+            {
+              "type": "add_stability",
+              "targetTags": ["captured_tile"],
+              "value": 2
+            }
+          ]
+        },
+        {
+          "weight": 60,
+          "description": "The guardian resists but is eventually subdued",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ruin_curse",
+      "category": "ruin",
+      "name": "Ancient Curse",
+      "description": "Dark energy emanates from the ruins",
+      "triggers": ["capture_ruins"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "The tile becomes corrupted but yields power",
+          "effects": [
+            {
+              "type": "add_corruption",
+              "targetTags": ["captured_tile"],
+              "value": 1
+            },
+            {
+              "type": "grant_shadow_energy",
+              "value": 2
+            },
+            {
+              "type": "grant_divinity",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "well_blessing",
+      "category": "sacred_site",
+      "name": "Divine Blessing",
+      "description": "The sacred waters respond to your presence",
+      "triggers": ["capture_sacred_well"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "You are blessed with divine energy",
+          "effects": [
+            {
+              "type": "grant_divinity",
+              "value": 8
+            },
+            {
+              "type": "grant_faith",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "village_welcome",
+      "category": "settlement",
+      "name": "Warm Welcome",
+      "description": "The villagers embrace your divinity",
+      "triggers": ["capture_village"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 70,
+          "description": "The village pledges loyalty",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "weight": 30,
+          "description": "The village offers a gift",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 1
+            },
+            {
+              "type": "grant_relic",
+              "rarity": "common",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "village_resistance",
+      "category": "settlement",
+      "name": "Village Resistance",
+      "description": "The villagers are wary of your intentions",
+      "triggers": ["capture_village"],
+      "conditions": ["shadow_alignment_negative"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "It takes time to earn their trust",
+          "effects": [
+            {
+              "type": "damage_stability",
+              "targetTags": ["captured_tile"],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow_emergence",
+      "category": "shadow",
+      "name": "Shadow Emergence",
+      "description": "Dark energy coalesces on the map",
+      "triggers": ["turn_start"],
+      "conditions": ["turn_multiple_of_5", "shadow_influence_low"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "New corrupted tiles appear",
+          "effects": [
+            {
+              "type": "spawn_corruption",
+              "value": 2,
+              "targetTags": ["random_neutral"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow_accord_offer",
+      "category": "shadow",
+      "name": "Shadow's Whisper",
+      "description": "The Shadow offers you power... at a price",
+      "triggers": ["turn_start"],
+      "conditions": ["corruption_adjacent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Accept the offer or decline",
+          "isChoice": true,
+          "choices": [
+            {
+              "text": "Accept (Gain Shadow Energy, +10 Shadow Alignment)",
+              "effects": [
+                {
+                  "type": "grant_shadow_energy",
+                  "value": 3
+                },
+                {
+                  "type": "modify_shadow_alignment",
+                  "value": 10
+                }
+              ]
+            },
+            {
+              "text": "Decline (No effect)",
+              "effects": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "divine_revelation",
+      "category": "positive",
+      "name": "Divine Revelation",
+      "description": "Clarity washes over you",
+      "triggers": ["turn_start"],
+      "conditions": ["random_5_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "You gain insight into the divine mysteries",
+          "effects": [
+            {
+              "type": "grant_divinity",
+              "value": 3
+            },
+            {
+              "type": "reveal_tiles",
+              "value": 5,
+              "targetTags": ["random_hidden"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faithful_pilgrims",
+      "category": "positive",
+      "name": "Faithful Pilgrims",
+      "description": "Pilgrims seek out your shrines",
+      "triggers": ["turn_start"],
+      "conditions": ["has_shrine", "random_8_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "The pilgrims bring offerings",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "earthquake",
+      "category": "negative",
+      "name": "Earthquake",
+      "description": "The earth trembles violently",
+      "triggers": ["turn_start"],
+      "conditions": ["random_3_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Your territories are destabilized",
+          "effects": [
+            {
+              "type": "damage_stability",
+              "targetTags": ["owned", "random_3"],
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plague",
+      "category": "negative",
+      "name": "Plague",
+      "description": "Disease spreads through settlements",
+      "triggers": ["turn_start"],
+      "conditions": ["has_village", "random_4_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Villages suffer, reducing faith generation",
+          "effects": [
+            {
+              "type": "reduce_faith_income",
+              "targetTags": ["village"],
+              "value": 1,
+              "duration": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meteor_strike",
+      "category": "chaos",
+      "name": "Meteor Strike",
+      "description": "A celestial body crashes into the land",
+      "triggers": ["turn_start", "chaos_passive"],
+      "conditions": ["random_chaos_event"],
+      "outcomes": [
+        {
+          "weight": 50,
+          "description": "Destruction, but valuable minerals remain",
+          "effects": [
+            {
+              "type": "damage_stability",
+              "targetTags": ["random_tile"],
+              "value": 3
+            },
+            {
+              "type": "grant_divinity",
+              "value": 6
+            }
+          ]
+        },
+        {
+          "weight": 50,
+          "description": "The meteor misses your lands",
+          "effects": [
+            {
+              "type": "damage_stability",
+              "targetTags": ["random_enemy"],
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "time_rift",
+      "category": "chaos",
+      "name": "Time Rift",
+      "description": "Reality warps in strange ways",
+      "triggers": ["turn_start", "chaos_passive"],
+      "conditions": ["random_chaos_event"],
+      "outcomes": [
+        {
+          "weight": 33,
+          "description": "Gain extra Divinity this turn",
+          "effects": [
+            {
+              "type": "grant_divinity",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "weight": 33,
+          "description": "Random unit teleports",
+          "effects": [
+            {
+              "type": "teleport_random_unit",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "weight": 34,
+          "description": "Tiles shift unexpectedly",
+          "effects": [
+            {
+              "type": "swap_tile_owners",
+              "targetTags": ["random_2"],
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "miracle_discovery",
+      "category": "miracle",
+      "name": "Miracle Discovery",
+      "description": "You uncover the secret to a powerful miracle",
+      "triggers": ["sanctify_holy_site"],
+      "conditions": [],
+      "outcomes": [
+        {
+          "weight": 70,
+          "description": "A common miracle is revealed",
+          "effects": [
+            {
+              "type": "grant_miracle",
+              "rarity": "common",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "weight": 25,
+          "description": "A rare miracle is revealed",
+          "effects": [
+            {
+              "type": "grant_miracle",
+              "rarity": "rare",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "weight": 5,
+          "description": "A legendary miracle is revealed!",
+          "effects": [
+            {
+              "type": "grant_miracle",
+              "rarity": "legendary",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "followers_gather",
+      "category": "positive",
+      "name": "Followers Gather",
+      "description": "Your influence grows as more followers join",
+      "triggers": ["turn_start"],
+      "conditions": ["faith_above_20", "random_10_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Your faith strengthens",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 2
+            },
+            {
+              "type": "add_stability",
+              "targetTags": ["sanctified", "random_1"],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain_resonance",
+      "category": "domain_specific",
+      "name": "Domain Resonance",
+      "description": "Your domain's power surges through the land",
+      "triggers": ["turn_start"],
+      "conditions": ["sanctified_tiles_above_10", "random_8_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Sanctified tiles strengthen",
+          "effects": [
+            {
+              "type": "add_stability",
+              "targetTags": ["sanctified"],
+              "value": 1
+            },
+            {
+              "type": "grant_divinity",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow_retreat",
+      "category": "shadow",
+      "name": "Shadow Retreat",
+      "description": "The Shadow pulls back temporarily",
+      "triggers": ["turn_start"],
+      "conditions": ["shadow_influence_high", "random_5_percent"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Corrupted tiles stabilize",
+          "effects": [
+            {
+              "type": "reduce_corruption",
+              "targetTags": ["corrupted"],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shadow_surge",
+      "category": "shadow",
+      "name": "Shadow Surge",
+      "description": "The Shadow grows aggressive",
+      "triggers": ["turn_start"],
+      "conditions": ["turn_multiple_of_8", "shadow_aggression_high"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Shadow spreads faster this turn",
+          "effects": [
+            {
+              "type": "modify_shadow_spread_rate",
+              "value": 0.2,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "treasure_cache",
+      "category": "positive",
+      "name": "Hidden Treasure",
+      "description": "You stumble upon a hidden cache",
+      "triggers": ["explore"],
+      "conditions": ["random_6_percent"],
+      "outcomes": [
+        {
+          "weight": 60,
+          "description": "Divine energy fills the cache",
+          "effects": [
+            {
+              "type": "grant_divinity",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "weight": 30,
+          "description": "Sacred relics lie within",
+          "effects": [
+            {
+              "type": "grant_relic",
+              "rarity": "common",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "weight": 10,
+          "description": "Shadow Energy corrupts the treasure",
+          "effects": [
+            {
+              "type": "grant_shadow_energy",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wildfire",
+      "category": "fire",
+      "name": "Wildfire",
+      "description": "Flames spread across the land",
+      "triggers": ["turn_start"],
+      "conditions": ["fire_domain", "random_fire_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Forest tiles are burned",
+          "effects": [
+            {
+              "type": "change_terrain",
+              "targetTags": ["forest", "random_2"],
+              "value": "plains"
+            },
+            {
+              "type": "grant_divinity",
+              "value": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spring_rain",
+      "category": "water",
+      "name": "Spring Rain",
+      "description": "Cleansing rains wash over the land",
+      "triggers": ["turn_start"],
+      "conditions": ["water_domain", "random_water_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Corruption is washed away",
+          "effects": [
+            {
+              "type": "remove_corruption",
+              "targetTags": ["corrupted", "random_2"],
+              "value": 1
+            },
+            {
+              "type": "grant_faith",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "landslide",
+      "category": "earth",
+      "name": "Landslide",
+      "description": "The earth shifts and settles",
+      "triggers": ["turn_start"],
+      "conditions": ["earth_domain", "random_earth_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Hills become more fortified",
+          "effects": [
+            {
+              "type": "add_stability",
+              "targetTags": ["hills", "owned"],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aurora",
+      "category": "air",
+      "name": "Aurora",
+      "description": "Beautiful lights dance in the sky",
+      "triggers": ["turn_start"],
+      "conditions": ["air_domain", "random_air_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Visibility increases dramatically",
+          "effects": [
+            {
+              "type": "reveal_tiles",
+              "value": 8,
+              "targetTags": ["random_hidden"]
+            },
+            {
+              "type": "grant_divinity",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bloom",
+      "category": "life",
+      "name": "Sudden Bloom",
+      "description": "Life flourishes unexpectedly",
+      "triggers": ["turn_start"],
+      "conditions": ["life_domain", "random_life_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Your lands become more fertile",
+          "effects": [
+            {
+              "type": "grant_faith",
+              "value": 4
+            },
+            {
+              "type": "add_faith_yield",
+              "targetTags": ["owned", "random_2"],
+              "value": 1,
+              "duration": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "undead_rise",
+      "category": "death",
+      "name": "The Dead Rise",
+      "description": "Fallen souls answer your call",
+      "triggers": ["turn_start"],
+      "conditions": ["death_domain", "random_death_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "Wights spawn on your corrupted tiles",
+          "effects": [
+            {
+              "type": "spawn_unit",
+              "unitType": "wight",
+              "targetTags": ["corrupted", "owned"],
+              "value": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "divine_law",
+      "category": "order",
+      "name": "Divine Law",
+      "description": "Order resonates through your domain",
+      "triggers": ["turn_start"],
+      "conditions": ["order_domain", "random_order_event"],
+      "outcomes": [
+        {
+          "weight": 100,
+          "description": "All your tiles stabilize",
+          "effects": [
+            {
+              "type": "add_stability",
+              "targetTags": ["owned"],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
